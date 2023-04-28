@@ -1,19 +1,34 @@
 package com.example.android.bazel
 
-import com.google.common.truth.Truth
+import android.app.Activity
+import android.content.Intent
+import android.view.View
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.github.takahirom.roborazzi.RoborazziOptions
+import com.github.takahirom.roborazzi.captureRoboImage
+import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
-import org.robolectric.RobolectricTestRunner
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
-import org.robolectric.Shadows.shadowOf
-import android.content.Intent
 import org.robolectric.RuntimeEnvironment
-import android.app.Activity
-import android.view.View
-import org.junit.Assert.assertEquals
+import org.robolectric.Shadows.shadowOf
+import org.robolectric.annotation.GraphicsMode
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
+@GraphicsMode(GraphicsMode.Mode.NATIVE)
 class WelcomeActivityTest {
+
+//    @get:Rule
+//    val composeTestRule = createAndroidComposeRule<WelcomeActivity>()
+
+    @Before
+    fun setup() {
+        System.setProperty("roborazzi.test.record", "true")
+    }
 
     @Test
     fun clickingLogin_shouldStartLoginActivity() {
@@ -24,6 +39,24 @@ class WelcomeActivityTest {
             val expectedIntent = Intent(activity, LoginActivity::class.java)
             val actual: Intent = shadowOf(RuntimeEnvironment.application).getNextStartedActivity()
             assertEquals(expectedIntent.getComponent(), actual.getComponent())
+
+            onView(ViewMatchers.isRoot())
+                .captureRoboImage(
+                    filePath = "this-will-be-deleted/root.png",
+                    roborazziOptions = RoborazziOptions(recordOptions = RoborazziOptions.RecordOptions(0.5))
+                )
+
+            onView(withId(R.id.login))
+                .captureRoboImage(
+                    filePath = "this-will-be-deleted/login.png",
+                    roborazziOptions = RoborazziOptions(recordOptions = RoborazziOptions.RecordOptions(0.5))
+                )
+
+            onView(withId(R.id.login))
+                .captureRoboImage(
+                    filePath = "this-will-be-deleted/manual_small_view_buttons.png",
+                    roborazziOptions = RoborazziOptions(recordOptions = RoborazziOptions.RecordOptions(0.5))
+                )
         }
     }
 }

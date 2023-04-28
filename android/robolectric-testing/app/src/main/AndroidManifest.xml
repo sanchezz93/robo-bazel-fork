@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.bazel"
+    xmlns:tools="http://schemas.android.com/tools"
     >
 
     <application
@@ -17,9 +18,20 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity  >
 
         <activity android:name=".LoginActivity" />
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="com.example.android.bazel.androidx-startup"
+            android:exported="false"
+            tools:node="replace">
+        </provider>
     </application>
 
+    <uses-sdk
+        android:minSdkVersion="21"
+        android:targetSdkVersion="33"
+        android:maxSdkVersion="33" />
 </manifest>
